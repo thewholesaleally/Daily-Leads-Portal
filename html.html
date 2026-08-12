@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wholesale Ally - Daily Leads Access</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    /* Wholesale Ally Brand Variables */
+    :root {
+      --bg-cream: #F4F3EE;
+      --card-white: #FFFFFF;
+      --ally-green: #0F382C;
+      --ally-green-hover: #0A261E;
+      --ally-gold: #C5A059;
+      --ally-gold-hover: #B08C46;
+      --text-dark: #1E2322;
+      --border-color: #E2DFD7;
+      --error-red: #C93B2B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    /* Brand Header */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .brand-handle {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      font-size: 0.85rem;
+      color: var(--ally-green);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    /* FIX 1: "Daily Leads Access" styled to match PDF title */
+    .brand-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 3.2rem;
+      color: var(--ally-green);
+      line-height: 1;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-title span.italic-accent {
+      font-style: italic;
+      font-family: 'Instrument Serif', serif;
+      color: var(--ally-gold);
+    }
+
+    /* Access Gate Form Card */
+    .gate-container {
+      width: 100%;
+      max-width: 480px;
+      margin-top: 20px;
+    }
+
+    .gate-card {
+      background: var(--card-white);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 40px 32px;
+      box-shadow: 0 10px 30px rgba(15, 56, 44, 0.08);
+      text-align: center;
+    }
+
+    /* FIX 2: "Enter Passcode" styled to match PDF section subheadings */
+    .gate-card h2 {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--ally-green);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .course-notice {
+      background-color: rgba(197, 160, 89, 0.12);
+      border-left: 3px solid var(--ally-gold);
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      color: var(--text-dark);
+      line-height: 1.5;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .course-notice strong {
+      color: var(--ally-green);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 1rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s ease;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+
+    .input-field:focus {
+      border-color: var(--ally-green);
+    }
+
+    .btn-unlock {
+      background-color: var(--ally-green);
+      color: #FFFFFF;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-unlock:hover {
+      background-color: var(--ally-green-hover);
+    }
+
+    .error-msg {
+      color: var(--error-red);
+      font-size: 0.85rem;
+      margin-top: 12px;
+      display: none;
+      font-weight: 500;
+    }
+
+    /* Protected Lead Content Display */
+    .lead-content-wrapper {
+      width: 100%;
+      max-width: 900px;
+      display: none; /* Initially hidden */
+    }
+
+    .pdf-header-bar {
+      background-color: var(--ally-green);
+      color: #FFFFFF;
+      padding: 18px 24px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* FIX 3: "Sourced & Screened Daily Leads" styled to match PDF title typography */
+    .pdf-header-bar h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    .pdf-header-bar h3 span.italic-accent {
+      font-style: italic;
+      color: var(--ally-gold);
+    }
+
+    .badge-unlocked {
+      background-color: var(--ally-gold);
+      color: var(--ally-green);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .pdf-container {
+      width: 100%;
+      height: 780px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-top: none;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .download-section {
+      text-align: center;
+      margin-top: 30px;
+      padding-bottom: 40px;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--ally-gold);
+      color: var(--ally-green);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 4px 14px rgba(197, 160, 89, 0.35);
+    }
+
+    .btn-download:hover {
+      background-color: var(--ally-gold-hover);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand-header">
+    <div class="brand-handle">@THEWHOLESALEALLY</div>
+    <h1 class="brand-title">Daily <span class="italic-accent">Leads</span> Access</h1>
+  </div>
+
+  <div class="gate-container" id="accessGate">
+    <div class="gate-card">
+      <h2>Enter Passcode</h2>
+      
+      <div class="course-notice">
+        If you are looking for the access code, please check inside your <strong>Now We're Making Money Course</strong> zip file.
+      </div>
+
+      <form id="gateForm">
+        <div class="form-group">
+          <input 
+            type="password" 
+            id="passcode" 
+            class="input-field" 
+            placeholder="Enter Code" 
+            required 
+            autocomplete="off"
+          />
+          <button type="submit" class="btn-unlock">Unlock Daily Leads</button>
+        </div>
+        <div id="errorMessage" class="error-msg">
+          Incorrect access code. Please check your course files and try again.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="lead-content-wrapper" id="leadContent">
+    <div class="pdf-header-bar">
+      <h3>Sourced & Screened <span class="italic-accent">Daily Leads</span></h3>
+      <span class="badge-unlocked">Access Granted</span>
+    </div>
+
+    <div class="pdf-container">
+      <iframe 
+        src="Daily-Leads-All-Slides.pdf#toolbar=1&navpanes=0" 
+        class="pdf-viewer" 
+        title="Daily Leads Document">
+      </iframe>
+    </div>
+
+    <div class="download-section">
+      <a 
+        href="Daily-Leads-All-Slides.pdf" 
+        download="Wholesale_Ally_Daily_Leads.pdf" 
+        class="btn-download">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Download Daily Leads PDF
+      </a>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      const ACCESS_CODE = "0433";
+
+      $("#gateForm").on("submit", function(e) {
+        e.preventDefault();
+        
+        const enteredCode = $("#passcode").val().trim();
+
+        if (enteredCode === ACCESS_CODE) {
+          $("#accessGate").fadeOut(300, function() {
+            $("#leadContent").fadeIn(400);
+          });
+        } else {
+          $("#errorMessage").slideDown(200);
+          $("#passcode").focus();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
